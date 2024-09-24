@@ -1,0 +1,171 @@
+basePath: /api/v1
+definitions:
+  merror.httpErrorResponse:
+    properties:
+      cause:
+        type: string
+      detail:
+        type: string
+    type: object
+  model.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.RegisterUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        maxLength: 16
+        minLength: 5
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  model.UserResponse:
+    properties:
+      created_at:
+        type: string
+      name:
+        type: string
+      token:
+        type: string
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Backend API service for URL shortener app
+  title: Magic URL
+  version: 0.0.1
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user account by sending a JSON payload.
+      parameters:
+      - description: Register new user account
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "400":
+          description: data validation error or invalid request body
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+      summary: Register a new user account
+      tags:
+      - registration
+  /users/{userId}:
+    delete:
+      description: Delete user account by userId provided in url path.
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: userId parameter is empty or userId is not a valid ID
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+      summary: Delete user
+      tags:
+      - administration
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Log in an existing user account by sending a JSON payload.
+      parameters:
+      - description: Register new user account
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "400":
+          description: data validation error or invalid request body
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+      summary: User login
+      tags:
+      - authentication
+  /users/logout:
+    post:
+      description: Log out current authenticated user.
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: session id cookie is empty
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+      summary: User logout
+      tags:
+      - authentication
+  /users/me:
+    get:
+      description: Return current authenticated user information in JSON format.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/merror.httpErrorResponse'
+      summary: Current user
+      tags:
+      - user
+swagger: "2.0"

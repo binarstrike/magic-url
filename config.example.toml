@@ -1,0 +1,21 @@
+app_env = "development"
+# app_env = "production"
+
+[app]
+host = "127.0.0.1"
+port = 8080
+api_route = "/api/v1"
+
+[database]
+host = "127.0.0.1"
+port = 5432
+user = "rize"
+password = "rize123"
+db_name = "appdb"
+
+[redis]
+host = "127.0.0.1"
+port = 6379
+
+[jwt]
+secret = "8wcq1mgnu7x0v543zpj2rao9yblihkd6"
