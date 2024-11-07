@@ -1,0 +1,25 @@
+name: Testing code
+
+on:
+  pull_request:
+    branches: 
+      - "*"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+        cache-dependency-path: ./go.sum
+
+    - name: Install dependencies
+      run: go get .
+    
+    - name: Test
+      run: go test -v ./...
