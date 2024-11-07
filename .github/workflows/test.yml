@@ -19,7 +19,7 @@ jobs:
         cache-dependency-path: ./go.sum
 
     - name: Install dependencies
-      run: go get .
+      run: go mod download
     
     - name: Test
       run: go test -v ./...
